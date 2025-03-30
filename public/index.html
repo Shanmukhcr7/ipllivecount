@@ -25,7 +25,7 @@
         }
 
         .ipl-logo {
-            width: 80px; /* Small size */
+            width: 80px;
             height: auto;
         }
 
@@ -42,6 +42,12 @@
             box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             margin-top: 20px;
+        }
+
+        .viewer-count {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #ffcc00;
         }
 
         .fullscreen-btn {
@@ -90,6 +96,8 @@
         <h1>IPL Live Stream</h1>
     </header>
 
+    <p class="viewer-count">Live Viewers: <span id="viewerCount">0</span></p>
+
     <iframe id="videoFrame" src="https://crictos99.pages.dev/hindi2" allowfullscreen></iframe>
     
     <br>
@@ -104,6 +112,13 @@
     <p>Click the Telegram logo to watch IPL for free</p>
 
     <script>
+        // Connect to WebSocket Server
+        const socket = new WebSocket("ws://localhost:3000");
+
+        socket.onmessage = function(event) {
+            document.getElementById("viewerCount").innerText = event.data;
+        };
+
         // Fullscreen Functionality
         function toggleFullscreen() {
             const frame = document.getElementById("videoFrame");
