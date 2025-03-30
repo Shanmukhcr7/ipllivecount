@@ -1,41 +1,26 @@
 const express = require("express");
-const WebSocket = require("ws");
-const cors = require("cors");
+const http = require("http");
+const socketIo = require("socket.io");
 
 const app = express();
-app.use(cors());
+const server = http.createServer(app);
+const io = socketIo(server);
 
-const PORT = process.env.PORT || 3000;
+let viewers = 0;
 
-// WebSocket Server
-const server = app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+io.on("connection", (socket) => {
+    viewers++;
+    io.emit("updateViewerCount", viewers);
+
+    socket.on("disconnect", () => {
+        viewers--;
+        io.emit("updateViewerCount", viewers);
+    });
 });
 
-const wss = new WebSocket.Server({ server });
+app.use(express.static("public"));
 
-let liveViewers = 0;
-
-// Handle WebSocket connections
-wss.on("connection", (ws) => {
-    liveViewers++;
-    console.log(`New connection! Viewers: ${liveViewers}`);
-
-    // Send updated count to all clients
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(liveViewers);
-        }
-    });
-
-    ws.on("close", () => {
-        liveViewers--;
-        console.log(`Viewer left! Viewers: ${liveViewers}`);
-        
-        wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(liveViewers);
-            }
-        });
-    });
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
