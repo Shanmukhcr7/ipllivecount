@@ -82,26 +82,6 @@
             height: 65vh; /* Slightly larger video area */
             border: none;
         }
-        .fullscreen-btn {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            background-color: #ffc107; /* IPL yellow */
-            color: #222; /* Dark text on yellow */
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            opacity: 0.8;
-            transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.2s ease-in-out;
-        }
-        .fullscreen-btn:hover {
-            opacity: 1;
-            background-color: #f0b300;
-            transform: scale(1.05);
-        }
         .social-share {
             margin-top: 40px;
             display: flex;
@@ -155,7 +135,7 @@
         .sponsor-banner a:hover {
             text-decoration: underline;
         }
-    
+
         /* Responsive Design (Adjusted) */
         @media (max-width: 992px) {
             h1 {
@@ -165,7 +145,7 @@
                 height: 60vh;
             }
         }
-    
+
         @media (max-width: 768px) {
             header {
                 padding: 18px 25px;
@@ -188,12 +168,6 @@
             iframe {
                 height: 50vh;
             }
-            .fullscreen-btn {
-                font-size: 1rem;
-                padding: 10px 16px;
-                bottom: 10px;
-                right: 10px;
-            }
             .social-share {
                 gap: 15px;
                 margin-top: 35px;
@@ -212,7 +186,7 @@
                 margin-top: 40px;
             }
         }
-    
+
         @media (max-width: 576px) {
             h1 {
                 font-size: 1.8rem;
@@ -254,7 +228,6 @@
 
     <div class="video-container">
         <iframe id="videoFrame" src="https://userrr4591.ifrem.net/iframe/frame.php" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
-        <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
     </div>
 
     <section class="social-share">
@@ -268,19 +241,6 @@
     </div>
 
     <script>
-        function toggleFullscreen() {
-            const frame = document.getElementById("videoFrame");
-            if (frame.requestFullscreen) {
-                frame.requestFullscreen();
-            } else if (frame.mozRequestFullScreen) {
-                frame.mozRequestFullScreen();
-            } else if (frame.webkitRequestFullscreen) {
-                frame.webkitRequestFullscreen();
-            } else if (frame.msRequestFullscreen) {
-                frame.msRequestFullscreen();
-            }
-        }
-
         const socket = io();
         socket.on("updateViewerCount", (count) => {
             document.getElementById("viewerCount").innerText = "Viewers: " + count;
